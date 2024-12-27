@@ -36,6 +36,8 @@ public class SupportFormTest {
     @Test
     void supportFormTest () throws InterruptedException {
         webDriver.get("https://www.apartmanija.hr/kontakt");
+        webDriver.manage().window().setSize(new Dimension(1552, 832));
+
         Thread.sleep(500);
 
         WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
@@ -59,12 +61,12 @@ public class SupportFormTest {
         inquiryField.sendKeys("test");
         Thread.sleep(1000);
 
+        Thread.sleep(15000);
 
         submitButton.click();
         Thread.sleep(1000);
 
-        WebElement fromAlert = webDriver.findElement(By.id("cform_captcha_err"));
-        assertEquals("Obavezno polje", fromAlert.getText());
+        assertEquals("https://www.apartmanija.hr/kontakt/sc", webDriver.getCurrentUrl());
 
     }
 }
