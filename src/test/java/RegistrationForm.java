@@ -9,7 +9,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -113,13 +115,28 @@ public class RegistrationForm {
         WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
         WebElement link = webDriver.findElement(By.xpath("//*[@id=\"regform\"]/div/div[4]/div/label[2]/a"));
 
+        // Scroll into view if the link is not visible
         ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", link);
-        Thread.sleep(5000);
+        Thread.sleep(3000);
 
+        // Click the link (opens in a new tab/window)
         link.click();
 
+        // Wait for the new tab to open
+        Thread.sleep(3000);
 
+        // Get all open window handles
+        List<String> windowHandles = new ArrayList<>(webDriver.getWindowHandles());
 
+        // Switch to the new tab (the last one in the list)
+        webDriver.switchTo().window(windowHandles.get(1));
+
+        // Get the current URL of the new tab
+        String currentUrl = webDriver.getCurrentUrl();
+
+        // Assert the expected URL
+        assertEquals("https://saznaj-oib.porezna-uprava.hr/", currentUrl, "Wrong URL");
     }
+
 
 }
