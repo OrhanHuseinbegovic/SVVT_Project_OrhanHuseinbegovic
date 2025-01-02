@@ -75,6 +75,9 @@ public class Testing {
         inquiryField.sendKeys("test");
         Thread.sleep(1000);
 
+        WebElement search = webDriver.findElement(By.xpath("//*[@id=\"inp_dest\"]"));
+        search.sendKeys("Vis");
+
         submitButton.click();
         Thread.sleep(1000);
 

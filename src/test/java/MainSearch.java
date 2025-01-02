@@ -42,17 +42,17 @@ public class MainSearch {
         webDriver.get(baseUrl);
         String actualTitle = webDriver.getTitle();
         System.out.println("Actual title: " + actualTitle);
-        assertEquals("Apartmanija", actualTitle, "Title does not match");
+        assertEquals("Apartmani, sobe i privatni smještaj | Apartmanija.hr", actualTitle, "Title does not match");
         Thread.sleep(1000);
     }
 
     @Test
     void testRedirect() throws InterruptedException {
-        webDriver.get("https://lms.ibu.edu.ba/");
+        webDriver.get(baseUrl);
         Thread.sleep(2000);
         String currentUrl = webDriver.getCurrentUrl();
         System.out.println("Current URL is: " + currentUrl);
-        assertEquals("https://apartmanija.hr/", currentUrl);
+        assertEquals("https://www.apartmanija.hr/", currentUrl);
     }
 
     @Test
@@ -157,6 +157,34 @@ public class MainSearch {
         } catch (NumberFormatException e) {
             System.out.println("Error: Unable to convert the text to a number. The text was: " + resultText);
         }
+    }
+
+    @Test
+    void testDollarCurrencySearch() throws InterruptedException {
+        webDriver.get(baseUrl);
+
+        WebElement cookiesSubmit = webDriver.findElement(By.cssSelector(".btn_ok"));
+        Thread.sleep(1000);
+
+        cookiesSubmit.click();
+
+        webDriver.findElement(By.xpath("//*[@id=\"servicesDropdown\"]")).click();
+        Thread.sleep(1000);
+
+        webDriver.findElement(By.xpath("//*[@id=\"curr_list\"]/li[13]/a")).click();
+        Thread.sleep(1000);
+
+        WebElement search = webDriver.findElement(By.xpath("//*[@id=\"inp_dest\"]"));
+        search.sendKeys("Vis");
+        Thread.sleep(1000);
+
+        webDriver.findElement(By.cssSelector(".search_go_btn")).click();
+        Thread.sleep(2000);
+
+        WebElement firstApartmentCurrency = webDriver.findElement(By.xpath("//*[@id=\"ads_items\"]/div[1]/a/div[1]/div[2]/div[2]/div[2]/b"));
+        boolean containsDollar = firstApartmentCurrency.getText().contains("$");
+
+        assertTrue(containsDollar);
     }
 
 }
