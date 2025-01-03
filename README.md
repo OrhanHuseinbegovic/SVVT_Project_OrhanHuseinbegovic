@@ -10,4 +10,4 @@ This project was entirely made by 2 International Burch University students:
 2. Orhan Huseinbegović
 
 Who are at the moment last year student of Information technologies.
-If you want to know more about this project, feel free to contact the owner of this reposiroty.
+If you want to know more about this project, feel free to contact the owner of this repository.
