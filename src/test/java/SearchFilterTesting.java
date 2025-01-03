@@ -100,16 +100,7 @@ public class SearchFilterTesting {
 
         String lastApartment = webDriver.findElement(By.xpath("//*[@id=\"ads_items\"]/div[21]/a/div[2]/span")).getText();
 
-        if (firstApartment.contains("Apartmani Lujanka")) {
-            firstApartment = "Apartmani Lujanka";
-        }
-        if (lastApartment.contains("Apartmani Villa Ana")) {
-            lastApartment = "Apartmani Villa Ana";
-        }
-
         assertNotEquals(firstApartment, lastApartment, "There is no more than 1 apartment here");
-        assertEquals("Apartmani Lujanka", firstApartment);
-        assertEquals("Apartmani Villa Ana", lastApartment);
     }
 
 

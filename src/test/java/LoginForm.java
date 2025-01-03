@@ -15,6 +15,7 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Set;
 
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LoginForm {
@@ -82,52 +83,39 @@ public class LoginForm {
     }
 
     @Test
-    public void testForgotPassword() {
+    public void testForgotPassword() throws InterruptedException {
         webDriver.get(baseUrl);
         webDriver.manage().window().setSize(new Dimension(1470, 822));
 
-        // Store the current window handles
-        vars.put("window_handles", webDriver.getWindowHandles());
 
         // Click the "Forgot password?" link
         webDriver.findElement(By.linkText("Zaboravljena lozinka?")).click();
+        Thread.sleep(1000);
 
-        // Wait for the new window to appear and store its handle
-        String newWindowHandle = waitForWindow(webDriver, 2000, (Set<String>) vars.get("window_handles"));
-        vars.put("win7067", newWindowHandle);
+        String forgotPasswordURL = webDriver.getCurrentUrl();
+        Thread.sleep(2000);
 
-        // Switch to the new window
-        webDriver.switchTo().window(vars.get("win7067").toString());
+        WebElement cookiesSubmit = webDriver.findElement(By.cssSelector(".btn_ok"));
+        Thread.sleep(1000);
 
-        // Interact with elements in the new window
+        cookiesSubmit.click();
+
+        // IF fails, change email address
         WebElement emailField = webDriver.findElement(By.id("email_passrec"));
         emailField.click();
-        emailField.sendKeys("novi@gmail.com");
+        emailField.sendKeys("test@gmail.com");
 
-        String email = "novi@gmail.com";
+        String email = "test@gmail.com";
 
         // Click the submit button
         webDriver.findElement(By.id("submit")).click();
+        Thread.sleep(3000);
 
-        // Click on the confirmation message
-        webDriver.findElement(By.cssSelector(".msg_cont > span")).click();
+        String loginURL = webDriver.getCurrentUrl();
+        Thread.sleep(2000);
+
+        assertNotEquals(forgotPasswordURL, loginURL);
     }
 
-    private static String waitForWindow(WebDriver driver, int timeout, Set<String> oldHandles) {
-        for (int i = 0; i < timeout / 100; i++) {
-            Set<String> newHandles = driver.getWindowHandles();
-            newHandles.removeAll(oldHandles);
-            if (newHandles.size() > 0) {
-                return newHandles.iterator().next();
-            }
-            try {
-                Thread.sleep(100); // Wait for 100ms before retrying
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                throw new RuntimeException(e);
-            }
-        }
-        throw new RuntimeException("No new window appeared");
-    }
 
 }
