@@ -44,7 +44,7 @@ public class FooterLinksTesting {
     }
 
     @Test
-    void testRegionCardsRedirecting() throws InterruptedException {
+    void testFooterLinksRedirecting() throws InterruptedException {
         String[][] footerLinks = {
                 {"/html/body/div[20]/div/div[2]/div[2]/a[1]","https://www.apartmanija.hr/apartmani/dubrovnik"},
                 {"/html/body/div[20]/div/div[2]/div[2]/a[2]","https://www.apartmanija.hr/apartmani/zadar"},
