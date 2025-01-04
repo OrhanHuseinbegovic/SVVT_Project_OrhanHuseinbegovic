@@ -103,6 +103,36 @@ public class SearchFilterTesting {
         assertNotEquals(firstApartment, lastApartment, "There is no more than 1 apartment here");
     }
 
+    @Test
+    void testFilterOnApartment() throws InterruptedException {
+        webDriver.get(baseUrl + "/pretraga/apartmani/r:split-i-okolica+c:gradac+osobe:1");
+        Thread.sleep(1500);
+        WebElement button = webDriver.findElement(By.xpath("/html/body/div[9]/div[5]/button"));
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", button);
+        Thread.sleep(1500);
+        webDriver.findElement(By.xpath("/html/body/div[9]/div[5]/button")).click();
+        Thread.sleep(500);
+        webDriver.findElement(By.xpath("/html/body/div[9]/div[5]/div/div/div[15]")).click();
+        Thread.sleep(1500);
+
+        webDriver.findElement(By.xpath("/html/body/div[9]/div[5]/button")).click();
+        Thread.sleep(500);
+        webDriver.findElement(By.xpath("//*[@id=\"ads_items\"]/div[1]")).click();
+        Thread.sleep(1500);
+
+        String newUrl = webDriver.getCurrentUrl();
+        WebElement anotherButton = webDriver.findElement(By.xpath("//*[@id=\"unit_1\"]/div[1]/div[1]/div[1]/text[6]/a"));
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", anotherButton);
+        Thread.sleep(1500);
+
+        webDriver.findElement(By.xpath("//*[@id=\"unit_1\"]/div[1]/div[1]/div[1]/text[6]/a")).click();
+        Thread.sleep(1500);
+        String kuhinja = webDriver.findElement(By.xpath("//*[@id=\"mod-unit-ame-content70733\"]/div/div[2]/div[4]/label")).getText();
+
+        assertEquals("https://www.apartmanija.hr/apartmani/gradac/apartman-iris/27385", newUrl, "Wrong URL");
+        assertEquals("Kuhinja", kuhinja, "Should say Kuhinja");
+    }
+
 
 
 }

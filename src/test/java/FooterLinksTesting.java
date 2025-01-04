@@ -106,5 +106,20 @@ public class FooterLinksTesting {
         }
     }
 
+    @Test
+    void testFooterButtons() throws InterruptedException {
+        webDriver.get(baseUrl);
+
+        WebElement footerButton = webDriver.findElement(By.xpath("/html/body/div[20]/div/div[1]/div[2]/a[1]"));
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", footerButton);
+        Thread.sleep(2000);
+
+        webDriver.findElement(By.xpath("/html/body/div[20]/div/div[1]/div[2]/a[1]")).click();
+
+        String currentUrl = webDriver.getCurrentUrl();
+
+        assertEquals("https://www.apartmanija.hr/oglasavanje-smjestaja", currentUrl, "Wrong URL");
+    }
+
 
 }
