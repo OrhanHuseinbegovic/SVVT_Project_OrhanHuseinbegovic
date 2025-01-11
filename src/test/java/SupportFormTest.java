@@ -14,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SupportFormTest {
     private static WebDriver webDriver;
+    JavascriptExecutor js = (JavascriptExecutor) webDriver;
+
 
     @BeforeAll
     public static void setUp() {
@@ -22,6 +24,13 @@ public class SupportFormTest {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
         webDriver = new ChromeDriver(options);
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
+
+        webDriver.get("https://www.apartmanija.hr/kontakt");
+        webDriver.manage().window().maximize();
+
+        WebElement cookieButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@class = 'btn_ok']")));
+        cookieButton.click();
     }
 
     @AfterAll
@@ -32,21 +41,13 @@ public class SupportFormTest {
         }
     }
 
-    //It passed, but now it FAILS, check why
     @Test
     void supportFormTest () throws InterruptedException {
-        webDriver.get("https://www.apartmanija.hr/kontakt");
-        webDriver.manage().window().setSize(new Dimension(1552, 832));
-
         Thread.sleep(500);
 
-        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
-
-        WebElement cookieButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@class = 'btn_ok']")));
-        cookieButton.click();
-        Thread.sleep(800);
-
         WebElement fnameField = webDriver.findElement(By.id("fname"));
+        js.executeScript("arguments[0].scrollIntoView(true);", fnameField);
+
         WebElement lnameField = webDriver.findElement(By.name("lname"));
         WebElement emailField = webDriver.findElement(By.name("email"));
         WebElement mobileField = webDriver.findElement(By.name("mobile"));
@@ -68,5 +69,33 @@ public class SupportFormTest {
 
         assertEquals("https://www.apartmanija.hr/kontakt/sc", webDriver.getCurrentUrl());
 
+    }
+
+    @Test
+    void assertErrorAppearsWhenCaptchaIsNotClicked() throws InterruptedException {
+        Thread.sleep(500);
+
+        WebElement fnameField = webDriver.findElement(By.id("fname"));
+        js.executeScript("arguments[0].scrollIntoView(true);", fnameField);
+
+        WebElement lnameField = webDriver.findElement(By.name("lname"));
+        WebElement emailField = webDriver.findElement(By.name("email"));
+        WebElement mobileField = webDriver.findElement(By.name("mobile"));
+        WebElement inquiryField = webDriver.findElement(By.name("inquiry"));
+        WebElement submitButton = webDriver.findElement(By.xpath("//input[@class = 'ad_btn']"));
+        Thread.sleep(1000);
+
+        fnameField.sendKeys("Test");
+        lnameField.sendKeys("Test");
+        emailField.sendKeys("testsvvt@gmail.com");
+        mobileField.sendKeys("+385 98 765 432");
+        inquiryField.sendKeys("test");
+        Thread.sleep(1000);
+
+        submitButton.click();
+        Thread.sleep(1000);
+
+        WebElement errorLabel = webDriver.findElement(By.id("cform_captcha_err"));
+        assertEquals("Obavezno polje", errorLabel.getText());
     }
 }

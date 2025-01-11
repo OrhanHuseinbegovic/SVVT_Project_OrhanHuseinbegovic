@@ -29,7 +29,7 @@ public class LanguageAndCurrencyTest {
         WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
 
         webDriver.get("https://www.apartmanija.hr");
-        webDriver.manage().window().setSize(new Dimension(1552, 832));
+        webDriver.manage().window().maximize();
 
         WebElement cookieButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@class = 'btn_ok']")));
         cookieButton.click();

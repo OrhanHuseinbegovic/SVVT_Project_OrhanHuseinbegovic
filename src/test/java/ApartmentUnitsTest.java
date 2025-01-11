@@ -88,4 +88,74 @@ public class ApartmentUnitsTest {
             assertTrue(selectedOption.contains(trimedTitle), "Unit mismatch: Title not found in form.");
         }
     }
+
+    @Test
+    void testApartmentUnitForm() throws InterruptedException {
+        WebElement apartmentCard = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class='card']/a")));
+        String hrefValue = apartmentCard.getAttribute("href");
+        // Scroll into view
+        js.executeScript("arguments[0].scrollIntoView(true);", apartmentCard);
+        js.executeScript("arguments[0].click();", apartmentCard);
+
+        assertEquals(hrefValue,webDriver.getCurrentUrl(),"Page mismatch.");
+
+        WebElement unitTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='unit_2']/div[1]/div[1]/span")));
+        js.executeScript("arguments[0].scrollIntoView(true);", unitTitle);
+        Thread.sleep(500);
+        WebElement unitButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='unit_2']/div[1]/div[2]/a[2]")));
+        unitButton.click();
+        Thread.sleep(500);
+
+        WebElement fname = webDriver.findElement(By.id("fname"));
+        js.executeScript("arguments[0].scrollIntoView(true);", fname);
+        fname.sendKeys("Test");
+        Thread.sleep(500);
+
+        WebElement lname = webDriver.findElement(By.xpath("//*[@id='cform']/div[1]/div[2]/input"));
+        lname.sendKeys("Test");
+        Thread.sleep(500);
+
+        WebElement email = webDriver.findElement(By.xpath("//*[@id='cform']/div[1]/div[3]/input"));
+        js.executeScript("arguments[0].scrollIntoView(true);", email);
+        email.sendKeys("test@test.com");
+        Thread.sleep(500);
+
+        WebElement phone = webDriver.findElement(By.xpath("//*[@id='cform']/div[1]/div[4]/input"));
+        phone.sendKeys("385 98 765 432");
+        Thread.sleep(500);
+
+
+        WebElement arrival = webDriver.findElement(By.id("arrival"));
+        arrival.click();
+        Thread.sleep(500);
+        WebElement arrivalDate = webDriver.findElement(By.xpath("/html/body/div[23]/div[1]/div[2]/table/tbody/tr[5]/td[1]"));
+        arrivalDate.click();
+        Thread.sleep(500);
+
+        WebElement departure = webDriver.findElement(By.id("departure"));
+        departure.click();
+        Thread.sleep(500);
+        WebElement departureDate = webDriver.findElement(By.xpath("/html/body/div[25]/div[1]/div[2]/table/tbody/tr[5]/td[5]"));
+        departureDate.click();
+        Thread.sleep(500);
+
+        Select adults = new Select(webDriver.findElement(By.xpath("//*[@id='cform']/div[1]/div[8]/select")));
+        adults.selectByValue("2");
+        Thread.sleep(500);
+
+        Select children = new Select(webDriver.findElement(By.xpath("//*[@id='cform']/div[1]/div[10]/select")));
+        children.selectByValue("2");
+        Thread.sleep(500);
+
+        WebElement text = webDriver.findElement(By.xpath("//*[@id='cform']/div[1]/div[11]/textarea"));
+        js.executeScript("arguments[0].scrollIntoView(true);", text);
+        text.sendKeys("Test");
+        Thread.sleep(500);
+
+        WebElement total = webDriver.findElement(By.xpath("//*[@id='cform']/div[2]/div[2]/div/div[2]/div[4]/span"));
+        js.executeScript("arguments[0].scrollIntoView(true);", total);
+
+        assertEquals("208 €", total.getText(), "Price mismatch.");
+
+    }
 }

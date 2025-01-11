@@ -106,7 +106,7 @@ public class CommentFormTest {
         //closeButton.click();
 
     }
-/*
+
     @Test
     void assertErrorModalAppearsWhenCaptchaIsNotClicked() throws InterruptedException {
         //$x('//a[@class="float-md-end"]') or $x('//u[contains(.,"Napiši komentar!")]')
@@ -163,7 +163,7 @@ public class CommentFormTest {
 
         assertEquals("Došlo je do greške, molimo pokušajte kasnije!", errorModal.getText());
 
-        WebElement closeButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class = 'modal modal_review show']/div[@class = 'modal-dialog modal-xl']/div[@class = 'modal-content']/div[@class = 'modal-header']/button[@class = 'btn_close']")));
+        WebElement closeButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='reviewModal']/div/div/div[1]/button")));
         closeButton.click();
-    }*/
+    }
 }
