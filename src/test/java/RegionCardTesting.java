@@ -9,6 +9,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
+
+
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -114,6 +119,56 @@ public class RegionCardTesting {
             webDriver.switchTo().window(originalWindow);
         }
     }
+
+    @Test
+    void testInterestingPlacesAndEvents() throws InterruptedException {
+        webDriver.get(baseUrl);
+
+        String[] regionCardsLinks = {
+                "Apartmani i smještaj na otocima",
+                "Smještaj u Istri",
+                "Smještaj na Kvarneru",
+                "Smještaj u Zadru i okolici",
+                "Smještaj u Šibeniku i okolici",
+                "Smještaj - Split i okolica"
+        };
+
+        for(int i=0; i<6; i++){
+            WebElement cards = webDriver.findElement(By.xpath("//*[@id=\"reg0\"]/a"));
+            ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", cards);
+            Thread.sleep(1000);
+
+            WebElement cookiesSubmit = webDriver.findElement(By.cssSelector(".btn_ok"));
+            WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(4));
+            WebElement element = checkElementVisibility(wait, cookiesSubmit);
+            if (element != null) {
+                // If the element is visible, perform an action
+                cookiesSubmit.click();
+            }
+
+            WebElement zanimljivosti = webDriver.findElement(By.linkText(regionCardsLinks[i]));
+            zanimljivosti.click();
+            Thread.sleep(1000);
+
+            WebElement carouselInner = webDriver.findElement(By.className("carousel-inner"));
+            List<WebElement> titles = carouselInner.findElements(By.cssSelector(".carousel-item .poi_slider_ttl"));
+
+            assertEquals(10, titles.size(), "There should be 10 titles!");
+
+            Thread.sleep(1000);
+            webDriver.navigate().back();
+        }
+
+    }
+
+    private static WebElement checkElementVisibility(WebDriverWait wait, WebElement element) {
+        try {
+            return wait.until(ExpectedConditions.visibilityOf(element));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 
 
 }
